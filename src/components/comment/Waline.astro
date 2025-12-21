@@ -21,11 +21,26 @@ const config = {
   <style is:global>
     :root {
       --waline-theme-color: var(--primary) !important;
-	  --waline-active-color: var(--btn-card-bg-active) !important;
+	    --waline-active-color: var(--btn-card-bg-active) !important;
     }
   </style>
   <script type="module" is:inline define:vars={{ config }}>
     import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
     init(config);
+
+    const waline = document.getElementById('waline');
+    const observer = new MutationObserver(() => {
+      if (!waline) return;
+      const buttons = waline.querySelectorAll('.wl-btn');
+      buttons.forEach((btn) => {
+        if (btn.textContent.trim() === '登录') {
+          btn.style.display = 'none';
+        }
+      });
+    });
+
+    if (waline) {
+      observer.observe(waline, { childList: true, subtree: true });
+    }
   </script>
 </div>

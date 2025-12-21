@@ -10,7 +10,7 @@
 
 如果你想和我交流技术问题，分享有趣的想法，或者只是想打个招呼，欢迎通过以下方式联系我：
 
-- **GitHub**: [qmazon](https://github.com/qmazon)
+- **GitHub**: [Snowy117](https://github.com/Snowy117)
 - **Email**: [snowflies@outlook.com](mailto:snowflies@outlook.com)
 
 ---

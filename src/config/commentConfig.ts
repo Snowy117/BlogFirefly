@@ -20,6 +20,8 @@ export const commentConfig: CommentConfig = {
 		//   'force'    —— 强制必须登录后才能评论，适合严格社区，关闭匿名评论。
 		//   'disable'  —— 禁止所有登录和 OAuth，仅允许匿名评论（填写昵称/邮箱），适用于极简留言。
 		visitorCount: true, // 文章访问量统计功能。
+		requiredMeta: ["nick", "mail"], // 必填的评论者信息，可选值有 'nick' 昵称, 'mail' 邮箱, 'link' 网址
+		reaction: true, // 是否启用评论反应功能
 	},
 
 	// artalk评论系统配置

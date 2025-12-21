@@ -167,6 +167,8 @@ export type CommentConfig = {
 		lang?: string;
 		login?: "enable" | "force" | "disable";
 		visitorCount?: boolean; // 是否统计访问量，true 启用访问量，false 关闭
+		requiredMeta?: Array<"nick" | "mail" | "link">; // 必填的评论者信息
+		reaction?: boolean; // 是否启用评论反应功能
 	};
 	artalk?: {
 		// 后端程序 API 地址
