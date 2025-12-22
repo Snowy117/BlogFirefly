@@ -32,9 +32,15 @@ const postUrl = sourceLink || decodeURIComponent(Astro.url.toString());
   <div class="transition font-bold text-black/75 dark:text-white/75">
     {title}
   </div>
-  <a href={postUrl} class="link text-[var(--primary)]">
-    {postUrl}
-  </a>
+  <div class="flex items-center gap-2">
+    <div class="copy-url-btn group cursor-pointer transition text-[var(--primary)] flex items-center gap-2" data-url={postUrl}>
+      <div class="relative w-4 h-4 flex items-center justify-center">
+        <Icon name="fa6-regular:copy" class="icon-copy absolute transition-all scale-100" />
+        <Icon name="fa6-solid:check" class="icon-check absolute transition-all scale-0 opacity-0" />
+      </div>
+      <div class="link text-[var(--primary)] transition-colors group-hover:text-[var(--primary)]/75">{postUrl}</div>
+    </div>
+  </div>
   <div class="flex gap-6 mt-2">
     <div>
       <div class="transition text-black/30 dark:text-white/30 text-sm">
@@ -79,3 +85,34 @@ const postUrl = sourceLink || decodeURIComponent(Astro.url.toString());
     class="transition text-[15rem] absolute pointer-events-none right-6 top-1/2 -translate-y-1/2 text-black/5 dark:text-white/5"
   />
 </div>
+
+<script>
+  function initCopyUrl() {
+    const btns = document.querySelectorAll('.copy-url-btn');
+    for (const btn of btns) {
+      btn.addEventListener('click', async (e) => {
+        const url = btn.getAttribute('data-url');
+        const copyIcon = btn.querySelector('.icon-copy');
+        const checkIcon = btn.querySelector('.icon-check');
+
+        if (url) {
+          try {
+            await navigator.clipboard.writeText(url);
+            if (copyIcon && checkIcon) {
+                copyIcon.classList.add('scale-0', 'opacity-0');
+                checkIcon.classList.remove('scale-0', 'opacity-0');
+                setTimeout(() => {
+                    copyIcon.classList.remove('scale-0', 'opacity-0');
+                    checkIcon.classList.add('scale-0', 'opacity-0');
+                }, 1000);
+            }
+          } catch (err) {
+            console.error('Failed to copy: ', err);
+          }
+        }
+      });
+    }
+  }
+  initCopyUrl();
+  document.addEventListener('astro:after-swap', initCopyUrl);
+</script>
