@@ -31,28 +31,53 @@ export class TOCManager {
 	 * 查找文章内容容器
 	 */
 	private getContentContainer(): Element | null {
-		return (
-			document.querySelector(".custom-md") ||
-			document.querySelector(".prose") ||
-			document.querySelector(".markdown-content")
-		);
+		const selectors = [
+			".post-content",
+			".article-content",
+			"#post-container",
+			"[data-pagefind-body]",
+			".markdown-content",
+			".custom-md",
+			".prose",
+		];
+
+		for (const selector of selectors) {
+			const elements = document.querySelectorAll(selector);
+			for (const element of Array.from(elements)) {
+				const hasHeadings = element.querySelector(
+					"h1, h2, h3, h4, h5, h6",
+				);
+				if (hasHeadings) {
+					return element;
+				}
+			}
+		}
+
+		return null;
 	}
 
 	/**
 	 * 查找所有标题
 	 */
-	private getAllHeadings(): NodeListOf<HTMLElement> {
+	private getAllHeadings(): HTMLElement[] {
 		const contentContainer = this.getContentContainer();
 		if (contentContainer) {
-			return contentContainer.querySelectorAll("h1, h2, h3, h4, h5, h6");
+			const scopedHeadings = Array.from(
+				contentContainer.querySelectorAll("h1, h2, h3, h4, h5, h6"),
+			).filter((node): node is HTMLElement => node instanceof HTMLElement);
+			if (scopedHeadings.length > 0) {
+				return scopedHeadings;
+			}
 		}
-		return document.querySelectorAll("h1, h2, h3, h4, h5, h6");
+		return Array.from(
+			document.querySelectorAll("h1, h2, h3, h4, h5, h6"),
+		).filter((node): node is HTMLElement => node instanceof HTMLElement);
 	}
 
 	/**
 	 * 计算最小深度
 	 */
-	private calculateMinDepth(headings: NodeListOf<HTMLElement>): number {
+	private calculateMinDepth(headings: HTMLElement[]): number {
 		let minDepth = 10;
 		headings.forEach((heading) => {
 			const depth = Number.parseInt(heading.tagName.charAt(1), 10);
@@ -64,7 +89,7 @@ export class TOCManager {
 	/**
 	 * 过滤标题
 	 */
-	private filterHeadings(headings: NodeListOf<HTMLElement>): HTMLElement[] {
+	private filterHeadings(headings: HTMLElement[]): HTMLElement[] {
 		return Array.from(headings).filter((heading) => {
 			const depth = Number.parseInt(heading.tagName.charAt(1), 10);
 			return depth < this.minDepth + this.maxLevel;
