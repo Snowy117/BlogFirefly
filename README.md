@@ -26,6 +26,15 @@
 [**📝使用文档**](https://docs-firefly.cuteleaf.cn/) /
 [**🍀我的博客**](https://blog.cuteleaf.cn) 
 
+## 🔄 同步上游模板
+
+如果你是从官方模板 Fork 而来，并且希望在撰写博文的同时保持模板最新，可使用 `pnpm sync:template`：
+
+- 首次执行前确保存在 `upstream` 远程：`git remote add upstream https://github.com/CuteLeaf/Firefly.git`
+- 每次运行脚本前先提交或暂存当前修改
+- 执行 `pnpm sync:template` 获取最新模板代码并合并到当前分支
+- 详细说明与冲突处理见 [docs/upstream-sync.md](docs/upstream-sync.md)
+
 📖 README：
 **[简体中文](README.md)** | **[English](README.en.md)** | **[日本語](docs/README.ja.md)** | **[Русский](docs/README.ru.md)**
 
