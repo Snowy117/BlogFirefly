@@ -9,7 +9,7 @@ export const siteConfig: SiteConfig = {
 	title: "雪纷飞",
 	subtitle: "雪纷飞的博客",
 	site_url: "https://snowy.cc.cd",
-	raw_github_content: "https://raw.githubusercontent.com/Snowy117/Firefly",
+	github_url: "https://github.com/Snowy117/Firefly",
 	description: "真诚，友善，专业！",
 	keywords: [
 		"网络",

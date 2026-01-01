@@ -153,10 +153,10 @@ const jsonLd = {
         </div>
 
       {
-        siteConfig.raw_github_content && (
+        siteConfig.github_url && (
           <div class="flex items-center ml-auto">
             <a
-              href={`${siteConfig.raw_github_content}/refs/heads/master/src/content/posts/${entry.id}/index.md`}
+              href={`${siteConfig.github_url}/tree/master/src/content/posts/${entry.id}`}
               target="_blank"
               class="link-lg transition text-50 text-sm font-medium
                     hover:text-[var(--primary)] dark:hover:text-[var(--primary)] whitespace-nowrap"
