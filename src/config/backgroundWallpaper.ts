@@ -11,7 +11,7 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 		// 桌面背景图片
 		desktop: "/assets/images/d1.png",
 		// 移动背景图片
-		mobile: "/assets/images/m3.webp",
+		mobile: "/assets/images/m1.webp",
 	},
 
 	// Banner模式特有配置
