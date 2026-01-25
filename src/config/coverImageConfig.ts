@@ -22,11 +22,11 @@ export const coverImageConfig: CoverImageConfig = {
 
 	randomCoverImage: {
 		// 随机封面图功能开关
-		enable: false,
+		enable: true,
 		// 封面图API列表
 		apis: [
-			"https://t.alcy.cc/pc",
 			"https://www.dmoe.cc/random.php",
+			"https://t.alcy.cc/pc",
 			"https://uapis.cn/api/v1/random/image?category=acg&type=pc",
 		],
 		// 备用图片路径

