@@ -247,16 +247,13 @@ export const zh_TW: Translation = {
 	[Key.savePoster]: "保存海報",
 	[Key.scanToRead]: "掃碼閱讀文章",
 
-<<<<<<< HEAD
 	// Typst viewer
 	[Key.typstNoPdf]: "暫無可展示的 Typst PDF。",
 	[Key.typstOpenPdf]: "下載 / 開啟 PDF",
 	[Key.typstPdfPreviewTitle]: "Typst PDF 預覽",
-=======
 	// 代碼區塊折疊配置
 	[Key.codeCollapsibleShowMore]: "顯示更多",
 	[Key.codeCollapsibleShowLess]: "顯示更少",
 	[Key.codeCollapsibleExpanded]: "代碼區塊已展開",
 	[Key.codeCollapsibleCollapsed]: "代碼區塊已折疊",
->>>>>>> upstream-sync
 };
