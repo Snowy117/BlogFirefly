@@ -187,6 +187,11 @@ export const en: Translation = {
 	[Key.wallpaperOverlayMode]: "Overlay Wallpaper",
 	[Key.wallpaperNoneMode]: "None Wallpaper",
 
+	// Post List Layout
+	[Key.postListLayout]: "Post List Layout",
+	[Key.postListLayoutList]: "List",
+	[Key.postListLayoutGrid]: "Grid",
+
 	// Sponsor Page
 	[Key.sponsor]: "Sponsor",
 	[Key.sponsorTitle]: "Support Me",
@@ -253,4 +258,9 @@ export const en: Translation = {
 	[Key.typstNoPdf]: "No Typst PDF available.",
 	[Key.typstOpenPdf]: "Download / Open PDF",
 	[Key.typstPdfPreviewTitle]: "Typst PDF Preview",
+	// Code Block Collapsible Configuration
+	[Key.codeCollapsibleShowMore]: "Show more",
+	[Key.codeCollapsibleShowLess]: "Show less",
+	[Key.codeCollapsibleExpanded]: "Code block expanded",
+	[Key.codeCollapsibleCollapsed]: "Code block collapsed",
 };

@@ -174,6 +174,11 @@ enum I18nKey {
 	wallpaperOverlayMode = "wallpaperOverlayMode",
 	wallpaperNoneMode = "wallpaperNoneMode",
 
+	// 文章布局
+	postListLayout = "postListLayout",
+	postListLayoutList = "postListLayoutList",
+	postListLayoutGrid = "postListLayoutGrid",
+
 	// 赞助页面
 	sponsor = "sponsor",
 	sponsorTitle = "sponsorTitle",
@@ -238,6 +243,11 @@ enum I18nKey {
 	typstNoPdf = "typstNoPdf",
 	typstOpenPdf = "typstOpenPdf",
 	typstPdfPreviewTitle = "typstPdfPreviewTitle",
+	// 代码块折叠配置
+	codeCollapsibleShowMore = "codeCollapsibleShowMore",
+	codeCollapsibleShowLess = "codeCollapsibleShowLess",
+	codeCollapsibleExpanded = "codeCollapsibleExpanded",
+	codeCollapsibleCollapsed = "codeCollapsibleCollapsed",
 }
 
 export default I18nKey;

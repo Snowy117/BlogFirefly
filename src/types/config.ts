@@ -246,6 +246,15 @@ export type ExpressiveCodeConfig = {
 	darkTheme: string;
 	/** 亮色主题名称（用于亮色模式） */
 	lightTheme: string;
+	/** 代码块折叠插件配置 */
+	pluginCollapsible?: PluginCollapsibleConfig;
+};
+
+export type PluginCollapsibleConfig = {
+	enable: boolean; // 是否启用代码块折叠功能
+	lineThreshold: number; // 触发折叠的行数阈值
+	previewLines: number; // 折叠时显示的预览行数
+	defaultCollapsed: boolean; // 默认是否折叠
 };
 
 export type AnnouncementConfig = {
@@ -335,19 +344,28 @@ export type WidgetComponentType =
 	| "sidebarToc"
 	| "advertisement"
 	| "stats"
-	| "calendar"
-	| "custom";
+	| "calendar";
 
 export type WidgetComponentConfig = {
 	type: WidgetComponentType; // 组件类型
 	enable: boolean; // 是否启用该组件
-	order: number; // 显示顺序，数字越小越靠前
 	position: "top" | "sticky"; // 组件位置：top=固定在顶部，sticky=粘性定位（可滚动）
-	class?: string; // 自定义CSS类名
-	style?: string; // 自定义内联样式
-	animationDelay?: number; // 动画延迟时间（毫秒）
 	configId?: string; // 配置ID，用于广告组件指定使用哪个配置
-	showOnPostPage?: boolean; // 是否在文章详情页显示（仅右侧边栏组件有效）
+	showOnPostPage?: boolean; // 是否在文章详情页显示
+	showOnNonPostPage?: boolean; // 是否在非文章详情页显示
+	responsive?: {
+		hidden?: ("mobile" | "tablet" | "desktop")[]; // 在指定设备上隐藏
+		collapseThreshold?: number; // 折叠阈值
+	};
+	customProps?: Record<string, unknown>; // 自定义属性，用于扩展组件功能
+};
+
+export type MobileBottomComponentConfig = {
+	type: WidgetComponentType; // 组件类型
+	enable: boolean; // 是否启用该组件
+	configId?: string; // 配置ID，用于广告组件指定使用哪个配置
+	showOnPostPage?: boolean; // 是否在文章详情页显示
+	showOnNonPostPage?: boolean; // 是否在非文章详情页显示
 	responsive?: {
 		hidden?: ("mobile" | "tablet" | "desktop")[]; // 在指定设备上隐藏
 		collapseThreshold?: number; // 折叠阈值
@@ -361,18 +379,7 @@ export type SidebarLayoutConfig = {
 	showRightSidebarOnPostPage?: boolean; // 当position为left时，是否在文章详情页显示右侧边栏
 	leftComponents: WidgetComponentConfig[]; // 左侧边栏组件配置列表
 	rightComponents: WidgetComponentConfig[]; // 右侧边栏组件配置列表
-	defaultAnimation: {
-		enable: boolean; // 是否启用默认动画
-		baseDelay: number; // 基础延迟时间（毫秒）
-		increment: number; // 每个组件递增的延迟时间（毫秒）
-	};
-	responsive: {
-		layout: {
-			mobile: "hidden" | "bottom" | "drawer" | "sidebar"; // 移动端布局模式
-			tablet: "hidden" | "sidebar" | "bottom" | "drawer"; // 平板端布局模式
-			desktop: "sidebar"; // 桌面端布局模式
-		};
-	};
+	mobileBottomComponents: MobileBottomComponentConfig[]; // 移动端底部组件配置列表（<768px显示）
 };
 
 export type SakuraConfig = {

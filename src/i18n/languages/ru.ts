@@ -188,6 +188,11 @@ export const ru: Translation = {
 	[Key.wallpaperOverlayMode]: "Прозрачный",
 	[Key.wallpaperNoneMode]: "Однотонный фон",
 
+	// Макет списка сообщений
+	[Key.postListLayout]: "Макет списка сообщений",
+	[Key.postListLayoutList]: "Список",
+	[Key.postListLayoutGrid]: "Сетка",
+
 	// Страница спонсоров
 	[Key.sponsor]: "Спонсор",
 	[Key.sponsorTitle]: "Поддержать меня",
@@ -254,4 +259,9 @@ export const ru: Translation = {
 	[Key.typstNoPdf]: "Нет доступного Typst PDF.",
 	[Key.typstOpenPdf]: "Скачать / открыть PDF",
 	[Key.typstPdfPreviewTitle]: "Предпросмотр Typst PDF",
+	// Конфигурация блоков коллапсируемого кода
+	[Key.codeCollapsibleShowMore]: "Показать больше",
+	[Key.codeCollapsibleShowLess]: "Показать меньше",
+	[Key.codeCollapsibleExpanded]: "Блок кода развернут",
+	[Key.codeCollapsibleCollapsed]: "Блок кода свернут",
 };
