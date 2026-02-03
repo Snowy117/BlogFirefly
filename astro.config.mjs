@@ -7,250 +7,252 @@ import swup from "@swup/astro";
 import { defineConfig } from "astro/config";
 import expressiveCode from "astro-expressive-code";
 import icon from "astro-icon";
-import mdx from "@astrojs/mdx";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypeCallouts from "rehype-callouts";
-import rehypeComponents from "rehype-components";
+import rehypeComponents from "rehype-components";/* Render the custom directive content */
 import rehypeKatex from "rehype-katex";
+import katex from "katex";
+import "katex/dist/contrib/mhchem.mjs"; // 加载 mhchem 扩展
 import rehypeSlug from "rehype-slug";
-import remarkDirective from "remark-directive";
+import remarkDirective from "remark-directive";/* Handle directives */
 import remarkMath from "remark-math";
+import rehypeCallouts from "rehype-callouts";
 import remarkSectionize from "remark-sectionize";
 import { expressiveCodeConfig, siteConfig } from "./src/config";
 import { i18n } from "./src/i18n/translation";
 import I18nKey from "./src/i18n/i18nKey";
-import { pluginLanguageBadge } from "expressive-code-language-badge"; /* Language Badge */
-import { pluginCollapsible } from "expressive-code-collapsible"; /* Collapsible */
+import { pluginLanguageBadge } from "expressive-code-language-badge";/* Language Badge */
+import { pluginCollapsible } from "expressive-code-collapsible";/* Collapsible */
 import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.mjs";
 import { rehypeMermaid } from "./src/plugins/rehype-mermaid.mjs";
 import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
 import { remarkExcerpt } from "./src/plugins/remark-excerpt.js";
 import { remarkMermaid } from "./src/plugins/remark-mermaid.js";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
+import mdx from "@astrojs/mdx";
 import rehypeEmailProtection from "./src/plugins/rehype-email-protection.mjs";
 import rehypeFigure from "./src/plugins/rehype-figure.mjs";
-import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-copy-button.js";
-import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.mjs";
-import { FileComponent } from "./src/plugins/rehype-component-file.mjs";
-import { expressiveCodeConfig, siteConfig } from "./src/config";
-import "katex/dist/contrib/mhchem.mjs";
+
+import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
-	site: siteConfig.site_url,
-	base: "/",
-	trailingSlash: "always",
-	integrations: [
-		tailwind({
-			nesting: true,
-		}),
-		swup({
-			theme: false,
-			animationClass: "transition-swup-", // see https://swup.js.org/options/#animationselector
-			// the default value `transition-` cause transition delay
-			// when the Tailwind class `transition-all` is used
-			containers: [
-				"#swup-container",
-				"#right-sidebar-dynamic",
-				"#floating-toc-wrapper",
-			],
-			smoothScrolling: false,
-			cache: true,
-			preload: true,
-			accessibility: true,
-			updateHead: true,
-			updateBodyClass: false,
-			globalInstance: true,
-			resolveUrl: (url) => url,
-			animateHistoryBrowsing: false,
-			skipPopStateHandling: (event) => {
-				return event.state && event.state.url && event.state.url.includes("#");
-			},
-		}),
-		icon({
-			include: {
-				"preprocess: vitePreprocess(),": ["*"],
-				"fa6-brands": ["*"],
-				"fa6-regular": ["*"],
-				"fa6-solid": ["*"],
-				mdi: ["*"],
-			},
-		}),
-		expressiveCode({
-			themes: [expressiveCodeConfig.darkTheme, expressiveCodeConfig.lightTheme],
-			useDarkModeMediaQuery: false,
-			themeCssSelector: (theme) => `[data-theme='${theme.name}']`,
-			plugins: [
-				pluginLanguageBadge(),
-				pluginCollapsibleSections(),
-				pluginLineNumbers(),
-				// pluginCollapsible 配置 - 从expressiveCodeConfig读取设置，使用i18n文本
-				...(expressiveCodeConfig.pluginCollapsible?.enable === true
-					? [
-							pluginCollapsible({
-								lineThreshold: expressiveCodeConfig.pluginCollapsible.lineThreshold || 15,
-								previewLines: expressiveCodeConfig.pluginCollapsible.previewLines || 8,
-								defaultCollapsed: expressiveCodeConfig.pluginCollapsible.defaultCollapsed ?? true,
-								expandButtonText: i18n(I18nKey.codeCollapsibleShowMore),
-								collapseButtonText: i18n(I18nKey.codeCollapsibleShowLess),
-								expandedAnnouncement: i18n(I18nKey.codeCollapsibleExpanded),
-								collapsedAnnouncement: i18n(I18nKey.codeCollapsibleCollapsed),
-							}),
-						]
-					: []),
-			],
-			defaultProps: {
-				wrap: false,
-				overridesByLang: {
-					shellsession: {
-						showLineNumbers: false,
-					},
-				},
-			},
-			styleOverrides: {
-				borderRadius: "0.75rem",
-				codeFontSize: "0.875rem",
-				codeFontFamily:
-					"'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-				codeLineHeight: "1.5rem",
-				frames: {},
-				textMarkers: {
-					delHue: 0,
-					insHue: 180,
-					markHue: 250,
-				},
-				languageBadge: {
-					fontSize: "0.75rem",
-					fontWeight: "bold",
-					borderRadius: "0.25rem",
-					opacity: "1",
-					borderWidth: "0px",
-					borderColor: "transparent",
-				},
-			},
-			frames: {
-				showCopyToClipboardButton: true,
-			},
-		}),
-		sitemap({
-			filter: (page) => {
-				const url = new URL(page);
-				const pathname = url.pathname;
+  site: siteConfig.site_url,
+  base: "/",
+  trailingSlash: "always",
 
-				if (pathname === "/sponsor/" && !siteConfig.pages.sponsor) {
-					return false;
-				}
-				if (pathname === "/guestbook/" && !siteConfig.pages.guestbook) {
-					return false;
-				}
-				if (pathname === "/bangumi/" && !siteConfig.pages.bangumi) {
-					return false;
-				}
+  integrations: [
+      tailwind({
+          nesting: true,
+      }),
+      swup({
+          theme: false,
+          animationClass: "transition-swup-", // see https://swup.js.org/options/#animationselector
+          // the default value `transition-` cause transition delay
+          // when the Tailwind class `transition-all` is used
+          containers: [
+              "#swup-container",
+              "#right-sidebar-dynamic",
+              "#floating-toc-wrapper",
+          ],
+          smoothScrolling: false,
+          cache: true,
+          preload: true,
+          accessibility: true,
+          updateHead: true,
+          updateBodyClass: false,
+          globalInstance: true,
+          resolveUrl: (url) => url,
+          animateHistoryBrowsing: false,
+          skipPopStateHandling: (event) => {
+              return event.state && event.state.url && event.state.url.includes("#");
+          },
+      }),
+      icon({
+          include: {
+              "preprocess: vitePreprocess(),": ["*"],
+              "fa6-brands": ["*"],
+              "fa6-regular": ["*"],
+              "fa6-solid": ["*"],
+              mdi: ["*"],
+          },
+      }),
+      expressiveCode({
+          themes: [expressiveCodeConfig.darkTheme, expressiveCodeConfig.lightTheme],
+          useDarkModeMediaQuery: false,
+          themeCssSelector: (theme) => `[data-theme='${theme.name}']`,
+          plugins: [
+              pluginLanguageBadge(),
+              pluginCollapsibleSections(),
+              pluginLineNumbers(),
+              // pluginCollapsible 配置 - 从expressiveCodeConfig读取设置，使用i18n文本
+              ...(expressiveCodeConfig.pluginCollapsible?.enable === true
+                  ? [
+                          pluginCollapsible({
+                              lineThreshold: expressiveCodeConfig.pluginCollapsible.lineThreshold || 15,
+                              previewLines: expressiveCodeConfig.pluginCollapsible.previewLines || 8,
+                              defaultCollapsed: expressiveCodeConfig.pluginCollapsible.defaultCollapsed ?? true,
+                              expandButtonText: i18n(I18nKey.codeCollapsibleShowMore),
+                              collapseButtonText: i18n(I18nKey.codeCollapsibleShowLess),
+                              expandedAnnouncement: i18n(I18nKey.codeCollapsibleExpanded),
+                              collapsedAnnouncement: i18n(I18nKey.codeCollapsibleCollapsed),
+                          }),
+                      ]
+                  : []),
+          ],
+          defaultProps: {
+              wrap: false,
+              overridesByLang: {
+                  shellsession: {
+                      showLineNumbers: false,
+                  },
+              },
+          },
+          styleOverrides: {
+              borderRadius: "0.75rem",
+              codeFontSize: "0.875rem",
+              codeFontFamily:
+                  "'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+              codeLineHeight: "1.5rem",
+              frames: {},
+              textMarkers: {
+                  delHue: 0,
+                  insHue: 180,
+                  markHue: 250,
+              },
+              languageBadge: {
+                  fontSize: "0.75rem",
+                  fontWeight: "bold",
+                  borderRadius: "0.25rem",
+                  opacity: "1",
+                  borderWidth: "0px",
+                  borderColor: "transparent",
+              },
+          },
+          frames: {
+              showCopyToClipboardButton: true,
+          },
+      }),
+      sitemap({
+          filter: (page) => {
+              const url = new URL(page);
+              const pathname = url.pathname;
 
-				return true;
-			},
-		}),
-		mdx(),
-		svelte(),
+              if (pathname === "/sponsor/" && !siteConfig.pages.sponsor) {
+                  return false;
+              }
+              if (pathname === "/guestbook/" && !siteConfig.pages.guestbook) {
+                  return false;
+              }
+              if (pathname === "/bangumi/" && !siteConfig.pages.bangumi) {
+                  return false;
+              }
+
+              return true;
+          },
+      }),
+      mdx(),
+      svelte(),
 	],
-	markdown: {
-		remarkPlugins: [
-			remarkMath,
-			remarkReadingTime,
-			remarkExcerpt,
-			remarkDirective,
-			remarkSectionize,
-			parseDirectiveNode,
-			remarkMermaid,
-		],
-		rehypePlugins: [
-			[rehypeKatex, { katex }],
-			[rehypeCallouts, { theme: siteConfig.rehypeCallouts.theme }],
-			rehypeSlug,
-			rehypeMermaid,
-			rehypeFigure,
-			[rehypeEmailProtection, { method: "base64" }],
-			[
-				rehypeComponents,
-				{
-					components: {
-						github: GithubCardComponent,
-						file: FileComponent,
-					},
-				},
-			],
-			[
-				rehypeAutolinkHeadings,
-				{
-					behavior: "append",
-					properties: {
-						className: ["anchor"],
-					},
-					content: {
-						type: "element",
-						tagName: "span",
-						properties: {
-							className: ["anchor-icon"],
-							"data-pagefind-ignore": true,
-						},
-						children: [
-							{
-								type: "text",
-								value: "#",
-							},
-						],
-					},
-				},
-			],
-		],
+
+  markdown: {
+      remarkPlugins: [
+          remarkMath,
+          remarkReadingTime,
+          remarkExcerpt,
+          remarkDirective,
+          remarkSectionize,
+          parseDirectiveNode,
+          remarkMermaid,
+      ],
+      rehypePlugins: [
+          [rehypeKatex, { katex }],
+          [rehypeCallouts, { theme: siteConfig.rehypeCallouts.theme }],
+          rehypeSlug,
+          rehypeMermaid,
+          rehypeFigure,
+          [rehypeEmailProtection, { method: "base64" }],
+          [
+              rehypeComponents,
+              {
+                  components: {
+                      github: GithubCardComponent,
+                  },
+              },
+          ],
+          [
+              rehypeAutolinkHeadings,
+              {
+                  behavior: "append",
+                  properties: {
+                      className: ["anchor"],
+                  },
+                  content: {
+                      type: "element",
+                      tagName: "span",
+                      properties: {
+                          className: ["anchor-icon"],
+                          "data-pagefind-ignore": true,
+                      },
+                      children: [
+                          {
+                              type: "text",
+                              value: "#",
+                          },
+                      ],
+                  },
+              },
+          ],
+      ],
 	},
-	vite: {
-		assetsInclude: ["**/*.zip"],
-		resolve: {
-			alias: {
-				"@rehype-callouts-theme": `rehype-callouts/theme/${siteConfig.rehypeCallouts.theme}`,
-			},
-			conditions: ["module", "browser", "development|production", "default"],
-		},
-		ssr: {
-			resolve: {
-				conditions: ["module", "node", "development|production", "default"],
-			},
-		},
-		build: {
-			// 启用资源压缩和优化
-			minify: "terser",
-			terserOptions: {
-				compress: {
-					drop_console: false, // 生产环境可改为true移除console
-					drop_debugger: true,
-				},
-				mangle: true,
-				format: {
-					comments: false,
-				},
-			},
-			rollupOptions: {
-				onwarn(warning, warn) {
-					if (
-						warning.message.includes("is dynamically imported by") &&
-						warning.message.includes("but also statically imported by")
-					) {
-						return;
-					}
-					warn(warning);
-				},
-			},
-			// CSS 优化
-			cssCodeSplit: true,
-			cssMinify: true,
-			// 资源大小限制 - 减少内联资源
-			assetsInlineLimit: 4096,
-			// 减少源映射大小（可选，生产环境改为false）
-			sourcemap: false,
-			// 并行处理构建
-			workers: 4,
-		},
+
+  vite: {
+      assetsInclude: ["**/*.zip"],
+      resolve: {
+          alias: {
+              "@rehype-callouts-theme": `rehype-callouts/theme/${siteConfig.rehypeCallouts.theme}`,
+          },
+          conditions: ["module", "browser", "development|production", "default"],
+      },
+      ssr: {
+          resolve: {
+              conditions: ["module", "node", "development|production", "default"],
+          },
+      },
+      build: {
+          // 启用资源压缩和优化
+          minify: "terser",
+          terserOptions: {
+              compress: {
+                  drop_console: false, // 生产环境可改为true移除console
+                  drop_debugger: true,
+              },
+              mangle: true,
+              format: {
+                  comments: false,
+              },
+          },
+          rollupOptions: {
+              onwarn(warning, warn) {
+                  if (
+                      warning.message.includes("is dynamically imported by") &&
+                      warning.message.includes("but also statically imported by")
+                  ) {
+                      return;
+                  }
+                  warn(warning);
+              },
+          },
+          // CSS 优化
+          cssCodeSplit: true,
+          cssMinify: true,
+          // 资源大小限制 - 减少内联资源
+          assetsInlineLimit: 4096,
+          // 减少源映射大小（可选，生产环境改为false）
+          sourcemap: false,
+          // 并行处理构建
+          workers: 4,
+      },
 	},
-	adapter: netlify(),
+
+  adapter: cloudflare(),
 });
