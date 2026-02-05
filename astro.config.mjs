@@ -1,6 +1,6 @@
 import sitemap from "@astrojs/sitemap";
 import svelte from "@astrojs/svelte";
-import tailwind from "@astrojs/tailwind";
+import tailwindcss from "@tailwindcss/vite";
 import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import swup from "@swup/astro";
@@ -38,105 +38,107 @@ import cloudflare from "@astrojs/cloudflare";
 // https://astro.build/config
 export default defineConfig({
   site: siteConfig.site_url,
-  base: "/",
-  trailingSlash: "always",
 
-  integrations: [
-      tailwind({
-          nesting: true,
-      }),
-      swup({
-          theme: false,
-          animationClass: "transition-swup-", // see https://swup.js.org/options/#animationselector
-          // the default value `transition-` cause transition delay
-          // when the Tailwind class `transition-all` is used
-          containers: [
-              "#swup-container",
-              "#right-sidebar-dynamic",
-              "#floating-toc-wrapper",
-          ],
-          smoothScrolling: false,
-          cache: true,
-          preload: true,
-          accessibility: true,
-          updateHead: true,
-          updateBodyClass: false,
-          globalInstance: true,
-          resolveUrl: (url) => url,
-          animateHistoryBrowsing: false,
-          skipPopStateHandling: (event) => {
-              return event.state && event.state.url && event.state.url.includes("#");
-          },
-      }),
-      icon({
-          include: {
-              "preprocess: vitePreprocess(),": ["*"],
-              "fa6-brands": ["*"],
-              "fa6-regular": ["*"],
-              "fa6-solid": ["*"],
-              mdi: ["*"],
-          },
-      }),
-      expressiveCode({
-          themes: [expressiveCodeConfig.darkTheme, expressiveCodeConfig.lightTheme],
-          useDarkModeMediaQuery: false,
-          themeCssSelector: (theme) => `[data-theme='${theme.name}']`,
-          plugins: [
-              pluginLanguageBadge(),
-              pluginCollapsibleSections(),
-              pluginLineNumbers(),
-              // pluginCollapsible 配置 - 从expressiveCodeConfig读取设置，使用i18n文本
-              ...(expressiveCodeConfig.pluginCollapsible?.enable === true
-                  ? [
-                          pluginCollapsible({
-                              lineThreshold: expressiveCodeConfig.pluginCollapsible.lineThreshold || 15,
-                              previewLines: expressiveCodeConfig.pluginCollapsible.previewLines || 8,
-                              defaultCollapsed: expressiveCodeConfig.pluginCollapsible.defaultCollapsed ?? true,
-                              expandButtonText: i18n(I18nKey.codeCollapsibleShowMore),
-                              collapseButtonText: i18n(I18nKey.codeCollapsibleShowLess),
-                              expandedAnnouncement: i18n(I18nKey.codeCollapsibleExpanded),
-                              collapsedAnnouncement: i18n(I18nKey.codeCollapsibleCollapsed),
-                          }),
-                      ]
-                  : []),
-          ],
-          defaultProps: {
-              wrap: false,
-              overridesByLang: {
-                  shellsession: {
-                      showLineNumbers: false,
-                  },
-              },
-          },
-          styleOverrides: {
-              borderRadius: "0.75rem",
-              codeFontSize: "0.875rem",
-              codeFontFamily:
-                  "'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-              codeLineHeight: "1.5rem",
-              frames: {},
-              textMarkers: {
-                  delHue: 0,
-                  insHue: 180,
-                  markHue: 250,
-              },
-              languageBadge: {
-                  fontSize: "0.75rem",
-                  fontWeight: "bold",
-                  borderRadius: "0.25rem",
-                  opacity: "1",
-                  borderWidth: "0px",
-                  borderColor: "transparent",
-              },
-          },
-          frames: {
-              showCopyToClipboardButton: true,
-          },
-      }),
-      sitemap({
-          filter: (page) => {
-              const url = new URL(page);
-              const pathname = url.pathname;
+	base: "/",
+	trailingSlash: "always",
+	integrations: [
+		swup({
+			theme: false,
+			animationClass: "transition-swup-", // see https://swup.js.org/options/#animationselector
+			// the default value `transition-` cause transition delay
+			// when the Tailwind class `transition-all` is used
+			containers: [
+				"#swup-container",
+				"#right-sidebar-dynamic",
+				"#floating-toc-wrapper",
+			],
+			smoothScrolling: false,
+			cache: true,
+			preload: true,
+			accessibility: true,
+			updateHead: true,
+			updateBodyClass: false,
+			globalInstance: true,
+			// 滚动相关配置优化
+			resolveUrl: (url) => url,
+			animateHistoryBrowsing: false,
+			skipPopStateHandling: (event) => {
+				// 跳过锚点链接的处理，让浏览器原生处理
+				return event.state && event.state.url && event.state.url.includes("#");
+			},
+		}),
+		icon({
+			include: {
+				"material-symbols": ["*"],
+				"fa7-brands": ["*"],
+				"fa7-regular": ["*"],
+				"fa7-solid": ["*"],
+				"simple-icons": ["*"], 
+				mdi: ["*"],
+			},
+		}),
+		expressiveCode({
+			themes: [expressiveCodeConfig.darkTheme, expressiveCodeConfig.lightTheme],
+			useDarkModeMediaQuery: false,
+			themeCssSelector: (theme) => `[data-theme='${theme.name}']`,
+			plugins: [
+				pluginLanguageBadge(),
+				pluginCollapsibleSections(),
+				pluginLineNumbers(),
+				// pluginCollapsible 配置 - 从expressiveCodeConfig读取设置，使用i18n文本
+				...(expressiveCodeConfig.pluginCollapsible?.enable === true
+					? [
+							pluginCollapsible({
+								lineThreshold: expressiveCodeConfig.pluginCollapsible.lineThreshold || 15,
+								previewLines: expressiveCodeConfig.pluginCollapsible.previewLines || 8,
+								defaultCollapsed: expressiveCodeConfig.pluginCollapsible.defaultCollapsed ?? true,
+								expandButtonText: i18n(I18nKey.codeCollapsibleShowMore),
+								collapseButtonText: i18n(I18nKey.codeCollapsibleShowLess),
+								expandedAnnouncement: i18n(I18nKey.codeCollapsibleExpanded),
+								collapsedAnnouncement: i18n(I18nKey.codeCollapsibleCollapsed),
+							}),
+						]
+					: []),
+			],
+			defaultProps: {
+				wrap: false,
+				overridesByLang: {
+					shellsession: {
+						showLineNumbers: false,
+					},
+				},
+			},
+			styleOverrides: {
+				borderRadius: "0.75rem",
+				codeFontSize: "0.875rem",
+				codeFontFamily:
+					"'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+				codeLineHeight: "1.5rem",
+				frames: {},
+				textMarkers: {
+					delHue: 0,
+					insHue: 180,
+					markHue: 250,
+				},
+				languageBadge: {
+					fontSize: "0.75rem",
+					fontWeight: "bold",
+					borderRadius: "0.25rem",
+					opacity: "1",
+					borderWidth: "0px",
+					borderColor: "transparent",
+				},
+			},
+			frames: {
+				showCopyToClipboardButton: true,
+			},
+		}),
+		svelte(),
+		sitemap({
+			filter: (page) => {
+				// 根据页面开关配置过滤sitemap
+				const url = new URL(page);
+				const pathname = url.pathname;
 
               if (pathname === "/sponsor/" && !siteConfig.pages.sponsor) {
                   return false;
@@ -206,54 +208,51 @@ export default defineConfig({
           ],
       ],
 	},
-
-  vite: {
+	vite: {
       assetsInclude: ["**/*.zip"],
-      resolve: {
-          alias: {
-              "@rehype-callouts-theme": `rehype-callouts/theme/${siteConfig.rehypeCallouts.theme}`,
-          },
-          conditions: ["module", "browser", "development|production", "default"],
-      },
-      ssr: {
-          resolve: {
-              conditions: ["module", "node", "development|production", "default"],
-          },
-      },
-      build: {
-          // 启用资源压缩和优化
-          minify: "terser",
-          terserOptions: {
-              compress: {
-                  drop_console: false, // 生产环境可改为true移除console
-                  drop_debugger: true,
-              },
-              mangle: true,
-              format: {
-                  comments: false,
-              },
-          },
-          rollupOptions: {
-              onwarn(warning, warn) {
-                  if (
-                      warning.message.includes("is dynamically imported by") &&
-                      warning.message.includes("but also statically imported by")
-                  ) {
-                      return;
-                  }
-                  warn(warning);
-              },
-          },
-          // CSS 优化
-          cssCodeSplit: true,
-          cssMinify: true,
-          // 资源大小限制 - 减少内联资源
-          assetsInlineLimit: 4096,
-          // 减少源映射大小（可选，生产环境改为false）
-          sourcemap: false,
-          // 并行处理构建
-          workers: 4,
-      },
+		plugins: [
+			tailwindcss(),
+		],
+		resolve: {
+			alias: {
+				"@rehype-callouts-theme": `rehype-callouts/theme/${siteConfig.rehypeCallouts.theme}`,
+			},
+		},
+		build: {
+			// 启用资源压缩和优化
+			minify: "terser",
+			terserOptions: {
+				compress: {
+					drop_console: false, // 生产环境可改为true移除console
+					drop_debugger: true,
+				},
+				mangle: true,
+				format: {
+					comments: false,
+				},
+			},
+			rollupOptions: {
+				onwarn(warning, warn) {
+					// temporarily suppress this warning
+					if (
+						warning.message.includes("is dynamically imported by") &&
+						warning.message.includes("but also statically imported by")
+					) {
+						return;
+					}
+					warn(warning);
+				},
+			},
+			// CSS 优化
+			cssCodeSplit: true,
+			cssMinify: true,
+			// 资源大小限制 - 减少内联资源
+			assetsInlineLimit: 4096,
+			// 减少源映射大小（可选，生产环境改为false）
+			sourcemap: false,
+			// 并行处理构建
+			workers: 4,
+		},
 	},
 
   adapter: cloudflare(),

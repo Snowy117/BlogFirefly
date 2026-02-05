@@ -34,20 +34,14 @@ const postUrl = sourceLink || decodeURIComponent(Astro.url.toString());
 ---
 
 <div
-  class={`relative transition overflow-hidden bg-[var(--license-block-bg)] py-5 px-6 ${className}`}
+  class={`relative transition overflow-hidden bg-(--license-block-bg) py-5 px-6 ${className}`}
 >
   <div class="transition font-bold text-black/75 dark:text-white/75">
     {title}
   </div>
-  <div class="flex items-center gap-2">
-    <div class="copy-url-btn group cursor-pointer transition text-[var(--primary)] flex items-center gap-2" data-url={postUrl}>
-      <div class="relative w-4 h-4 flex items-center justify-center">
-        <Icon name="fa6-regular:copy" class="icon-copy absolute transition-all scale-100" />
-        <Icon name="fa6-solid:check" class="icon-check absolute transition-all scale-0 opacity-0" />
-      </div>
-      <div class="link text-[var(--primary)] transition-colors group-hover:text-[var(--primary)]/75">{postUrl}</div>
-    </div>
-  </div>
+  <a href={postUrl} class="link text-(--primary)">
+    {postUrl}
+  </a>
   <div class="flex gap-6 mt-2">
     <div>
       <div class="transition text-black/30 dark:text-white/30 text-sm">
@@ -82,13 +76,13 @@ const postUrl = sourceLink || decodeURIComponent(Astro.url.toString());
       <a
         href={licenseName ? licenseUrl || undefined : licenseConf.url}
         target="_blank"
-        class="link text-[var(--primary)] line-clamp-2"
+        class="link text-(--primary) line-clamp-2"
         >{licenseName || licenseConf.name}</a
       >
     </div>
   </div>
   <Icon
-    name="fa6-brands:creative-commons"
+    name="fa7-brands:creative-commons"
     class="transition text-[15rem] absolute pointer-events-none right-6 top-1/2 -translate-y-1/2 text-black/5 dark:text-white/5"
   />
 </div>
