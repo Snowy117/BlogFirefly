@@ -28,7 +28,7 @@ export const zh_CN: Translation = {
 	[Key.comments]: "评论",
 	[Key.commentSection]: "评论区",
 	[Key.commentSubtitle]:
-		"留下邮箱才能收到新回复哦！我们不会把您的邮箱泄露给任何人！",
+		"留下邮箱才能收到新回复哦！我们不会把您的邮箱泄露给任何人！打开“本地网络访问权限”才能查看评论！",
 	[Key.commentNotConfigured]: "评论系统暂未配置",
 	[Key.guestbookCommentHint]:
 		"您还未在配置文件中启用评论系统，启用后访客才可在此留言",

@@ -459,6 +459,9 @@ int __fastcall main(int argc, const char **argv, const char **envp)
 
 ~~文章的篇幅已经够长了，本题的分析和解答就等有空了再水一篇博客吧！~~
 
+[解答][answer]已经写好啦！
+
 <!-- 引用 -->
 
 [attachment.zip]: /assets/ctf/seeuagain.zip "题目Seeuagain下载"
+[answer]: ./answer/ "解答"

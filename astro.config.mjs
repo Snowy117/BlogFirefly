@@ -23,6 +23,7 @@ import I18nKey from "./src/i18n/i18nKey";
 import { pluginLanguageBadge } from "expressive-code-language-badge";/* Language Badge */
 import { pluginCollapsible } from "expressive-code-collapsible";/* Collapsible */
 import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.mjs";
+import { FileComponent } from "./src/plugins/rehype-component-file.mjs";
 import { rehypeMermaid } from "./src/plugins/rehype-mermaid.mjs";
 import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
 import { remarkExcerpt } from "./src/plugins/remark-excerpt.js";
@@ -176,6 +177,7 @@ export default defineConfig({
               {
                   components: {
                       github: GithubCardComponent,
+					  file: FileComponent,
                   },
               },
           ],
