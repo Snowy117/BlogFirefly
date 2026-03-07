@@ -23,10 +23,15 @@ export type SiteConfig = {
 		defaultMode?: LIGHT_DARK_MODE; // 默认模式：浅色、深色或跟随系统
 	};
 
+	// 页面整体宽度（单位：rem）
+	pageWidth?: number;
+
 	// 卡片样式配置
 	card: {
 		// 是否开启卡片边框和阴影立体效果
 		border: boolean;
+		// 是否让卡片风格跟随主题色相
+		followTheme?: boolean;
 	};
 
 	// 字体配置
@@ -43,9 +48,10 @@ export type SiteConfig = {
 		theme: "github" | "obsidian" | "vitepress";
 	};
 
-	// 添加bangumi配置
+	// bangumi配置
 	bangumi?: {
 		userId?: string; // Bangumi用户ID
+		categoryOrder?: ("anime" | "game" | "book" | "music" | "real")[]; // 条目类型排序顺序
 	};
 
 	generateOgImages: boolean;
@@ -56,14 +62,15 @@ export type SiteConfig = {
 	}>;
 
 	navbar: {
-		/** 导航栏Logo图标，可选类型：icon库、图片链接、本地图片 */
+		/** 导航栏Logo图标，可选类型：icon库、本地图片、网络图片链接 */
 		logo?: {
-			type: "icon" | "image";
-			value: string; // icon名或图片url
+			type: "icon" | "image" | "url";
+			value: string; // icon名、本地图片路径或网络图片url
 			alt?: string; // 图片alt文本
 		};
 		title?: string; // 导航栏标题，如果不设置则使用 title
 		widthFull?: boolean; // 导航栏是否占满屏幕宽度
+		menuAlign?: "left" | "center"; // 导航菜单对齐方式（仅桌面端菜单）
 		followTheme?: boolean; // 导航栏图标和标题是否跟随主题色
 	};
 
@@ -76,7 +83,11 @@ export type SiteConfig = {
 		sponsor: boolean; // 赞助页面开关
 		guestbook: boolean; // 留言板页面开关
 		bangumi: boolean;
+		gallery: boolean; // 相册页面开关
 	};
+
+	// 分类导航栏开关
+	categoryBar?: boolean;
 
 	// 文章列表布局配置
 	postListLayout: {
@@ -86,8 +97,8 @@ export type SiteConfig = {
 			// 网格布局配置，仅在 defaultMode 为 "grid" 或允许切换布局时生效
 			// 是否开启瀑布流布局
 			masonry: boolean;
-			// 网格模式列数：2 或 3，默认为 2。注意：3列模式仅在单侧边栏（或无侧边栏）且屏幕宽度足够时生效
-			columns?: 2 | 3;
+			// 网格模式卡片最小宽度(px)，浏览器根据容器宽度自动计算列数，默认 320
+			columnWidth?: number;
 		};
 	};
 
@@ -100,6 +111,29 @@ export type SiteConfig = {
 	analytics?: {
 		googleAnalyticsId?: string; // Google Analytics ID
 		microsoftClarityId?: string; // Microsoft Clarity ID
+	};
+
+	// 图片优化配置
+	imageOptimization?: {
+		/**
+		 * 输出图片格式
+		 * - "avif": 仅输出 AVIF 格式（最小体积，兼容性较低）
+		 * - "webp": 仅输出 WebP 格式（体积适中，兼容性好）
+		 * - "both": 同时输出 AVIF 和 WebP（推荐，浏览器自动选择最佳格式）
+		 */
+		formats?: "avif" | "webp" | "both";
+		/**
+		 * 图片压缩质量 (1-100)
+		 * 值越低体积越小但质量越差，推荐 70-85
+		 */
+		quality?: number;
+		/**
+		 * 为特定域名的图片添加 referrerpolicy="no-referrer" 属性
+		 * 开启后可解决指定域名图片加载时的 403 问题（如防盗链图片）
+		 * 示例：["i0.hdslb.com", "*.bilibili.com"] 支持通配符 *
+		 * 仅影响匹配域名的图片标签，不影响其他链接的 referrer 行为
+		 */
+		noReferrerDomains?: string[];
 	};
 };
 
@@ -117,6 +151,7 @@ export enum LinkPreset {
 	Sponsor = 4,
 	Guestbook = 5,
 	Bangumi = 6,
+	Gallery = 7,
 }
 
 export type NavBarLink = {
@@ -173,6 +208,7 @@ export type CommentConfig = {
 	waline?: {
 		serverURL: string;
 		lang?: string;
+		emoji: string[];
 		login?: "enable" | "force" | "disable";
 		visitorCount?: boolean; // 是否统计访问量，true 启用访问量，false 关闭
 		requiredMeta?: Array<"nick" | "mail" | "link">; // 必填的评论者信息
@@ -248,6 +284,12 @@ export type ExpressiveCodeConfig = {
 	lightTheme: string;
 	/** 代码块折叠插件配置 */
 	pluginCollapsible?: PluginCollapsibleConfig;
+	/** 语言徽章插件配置 */
+	pluginLanguageBadge?: PluginLanguageBadgeConfig;
+};
+
+export type PluginLanguageBadgeConfig = {
+	enable: boolean; // 是否启用语言徽章
 };
 
 export type PluginCollapsibleConfig = {
@@ -309,29 +351,9 @@ export type CoverImageConfig = {
 	enableInPost: boolean; // 是否在文章详情页显示封面图
 	randomCoverImage: {
 		enable: boolean; // 是否启用随机图功能
-		apis: string[]; // 随机图API列表，支持 {seed} 占位符，会替换为文章slug或时间戳
-		fallback?: string; // 当API请求失败时的备用图片路径
-		// 加载指示器配置
-		loading?: {
-			// 加载指示器开关
-			enable: boolean;
-			image?: string; // 自定义加载图片路径（相对于public目录），默认 "/assets/images/loading.gif"
-			backgroundColor?: string; // 加载指示器背景颜色，默认与loading.gif背景色一致 (#fefefe)
-		};
-		watermark?: {
-			enable: boolean; // 是否显示水印
-			text?: string; // 水印文本，默认为"随机图"
-			position?:
-				| "top-left"
-				| "top-right"
-				| "bottom-left"
-				| "bottom-right"
-				| "center"; // 水印位置
-			opacity?: number; // 水印透明度 0-1，默认0.6
-			fontSize?: string; // 字体大小，默认"0.75rem"
-			color?: string; // 文字颜色，默认为白色
-			backgroundColor?: string; // 背景颜色，默认为半透明黑色
-		};
+		apis: string[]; // 随机图API列表
+		fallback?: string; // API失败时的回退图片路径（相对于src目录或以/开头的public目录路径）
+		showLoading?: boolean; // 是否显示加载动画
 	};
 };
 
@@ -344,7 +366,8 @@ export type WidgetComponentType =
 	| "sidebarToc"
 	| "advertisement"
 	| "stats"
-	| "calendar";
+	| "calendar"
+	| "music";
 
 export type WidgetComponentConfig = {
 	type: WidgetComponentType; // 组件类型
@@ -375,8 +398,9 @@ export type MobileBottomComponentConfig = {
 
 export type SidebarLayoutConfig = {
 	enable: boolean; // 是否启用侧边栏
-	position: "left" | "both"; // 侧边栏位置：左侧或双侧
-	showRightSidebarOnPostPage?: boolean; // 当position为left时，是否在文章详情页显示右侧边栏
+	position: "left" | "right" | "both"; // 侧边栏位置：左侧、右侧或双侧
+	tabletSidebar?: "left" | "right"; // 平板端(769-1279px)显示哪侧侧边栏，仅position为both时生效，默认left
+	showBothSidebarsOnPostPage?: boolean; // 当position为left或right时，是否在文章详情页显示双侧边栏
 	leftComponents: WidgetComponentConfig[]; // 左侧边栏组件配置列表
 	rightComponents: WidgetComponentConfig[]; // 右侧边栏组件配置列表
 	mobileBottomComponents: MobileBottomComponentConfig[]; // 移动端底部组件配置列表（<768px显示）
@@ -505,6 +529,7 @@ export type BackgroundWallpaperConfig = {
 			| string; // 壁纸位置，支持CSS object-position的所有值，包括百分比和像素值
 		homeText?: {
 			enable: boolean; // 是否在首页显示自定义文字（全局开关）
+			switchable?: boolean; // 是否允许用户通过控制面板切换横幅标题显示
 			title?: string; // 主标题
 			subtitle?: string | string[]; // 副标题，支持单个字符串或字符串数组
 			titleSize?: string; // 主标题字体大小，如 "3.5rem"
@@ -545,16 +570,25 @@ export type BackgroundWallpaperConfig = {
 			enable:
 				| boolean
 				| {
-						desktop: boolean; // 桌面端是否启用波浪动画效果
-						mobile: boolean; // 移动端是否启用波浪动画效果
-				  }; // 是否启用波浪动画效果，支持布尔值或分别设置桌面端和移动端
+						desktop: boolean; // 桌面端是否启用水波纹动画效果
+						mobile: boolean; // 移动端是否启用水波纹动画效果
+				  }; // 是否启用水波纹动画效果，支持布尔值或分别设置桌面端和移动端
+			switchable?: boolean; // 是否允许用户通过控制面板切换水波纹动画
 		};
 	};
 	// 全屏透明覆盖模式特有配置
 	overlay?: {
+		switchable?:
+			| boolean
+			| {
+					opacity?: boolean; // 是否允许用户在控制面板调整壁纸透明度
+					blur?: boolean; // 是否允许用户在控制面板调整背景模糊度
+					cardOpacity?: boolean; // 是否允许用户在控制面板调整卡片透明度
+			  }; // 透明模式参数是否可在控制面板调整，支持统一开关或分项开关
 		zIndex?: number; // 层级，确保壁纸在合适的层级显示
 		opacity?: number; // 壁纸透明度，0-1之间
 		blur?: number; // 背景模糊程度，单位px
+		cardOpacity?: number; // 卡片背景透明度，0-1之间
 	};
 };
 
@@ -597,16 +631,28 @@ export type FriendLink = {
 };
 
 export type FriendsPageConfig = {
-	columns: 2 | 3; // 显示列数：2列或3列
+	title?: string; // 页面标题，留空则使用 i18n 中的翻译
+	description?: string; // 页面描述，留空则使用 i18n 中的翻译
+	showCustomContent?: boolean; // 是否显示自定义内容（friends.mdx）
+	randomizeSort?: boolean; // 是否打乱排序，如果为 true，将忽略 weight，随机排序
 };
 
 // 音乐播放器配置
 export type MusicPlayerConfig = {
-	// 基础功能开关
-	enable: boolean; // 启用音乐播放器功能
-
 	// 使用方式：'meting' 或 'local'
 	mode?: "meting" | "local"; // "meting" 使用 Meting API，"local" 使用本地音乐列表
+
+	// 默认音量 (0-1)
+	volume?: number;
+
+	// 播放模式：'list'=列表循环, 'one'=单曲循环, 'random'=随机播放
+	playMode?: "list" | "one" | "random";
+
+	// 是否显示歌词
+	showLyrics?: boolean;
+
+	// 是否在导航栏显示音乐播放器
+	showInNavbar?: boolean;
 
 	// Meting API 配置
 	meting?: {
@@ -627,9 +673,6 @@ export type MusicPlayerConfig = {
 
 		// 备用 API 配置（当主 API 失败时使用）
 		fallbackApis?: string[];
-
-		// MetingJS 脚本路径（默认使用 CDN，也可配置为本地路径）
-		jsPath?: string;
 	};
 
 	// 本地音乐配置（当 mode 为 'local' 时使用）
@@ -641,63 +684,6 @@ export type MusicPlayerConfig = {
 			cover?: string; // 封面图片路径（相对于 public 目录）
 			lrc?: string; // 歌词内容，支持 LRC 格式
 		}>;
-	};
-
-	// APlayer 配置选项
-	player?: {
-		// 是否固定模式（固定在页面底部）
-		fixed?: boolean;
-
-		// 是否迷你模式
-		mini?: boolean;
-
-		// 是否自动播放
-		autoplay?: boolean;
-
-		// 主题色
-		theme?: string;
-
-		// 循环模式：'all'=列表循环, 'one'=单曲循环, 'none'=不循环
-		loop?: "all" | "one" | "none";
-
-		// 播放顺序：'list'=列表顺序, 'random'=随机播放
-		order?: "list" | "random";
-
-		// 预加载：'none'=不预加载, 'metadata'=预加载元数据, 'auto'=自动
-		preload?: "none" | "metadata" | "auto";
-
-		// 默认音量 (0-1)
-		volume?: number;
-
-		// 是否互斥播放（同时只能播放一个播放器）
-		mutex?: boolean;
-
-		// 歌词类型：0=不显示, 1=显示（需要提供 lrc 字段）, 2=显示（从 HTML 内容读取）, 3=异步加载（从 API 获取）
-		lrcType?: 0 | 1 | 2 | 3;
-
-		// 歌词是否默认隐藏（当 lrcType 不为 0 时，可以通过此选项控制初始显示状态）
-		lrcHidden?: boolean;
-
-		// 播放列表是否默认折叠
-		listFolded?: boolean;
-
-		// 播放列表最大高度
-		listMaxHeight?: string;
-
-		// localStorage 存储键名
-		storageName?: string;
-	};
-
-	// 响应式配置
-	responsive?: {
-		// 移动端配置
-		mobile?: {
-			// 在移动端是否隐藏
-			hide?: boolean;
-
-			// 移动端断点（小于此宽度时应用移动端配置）
-			breakpoint?: number;
-		};
 	};
 };
 
@@ -716,7 +702,6 @@ export type SponsorItem = {
 	name: string; // 赞助者名称，如果想显示匿名，可以直接设置为"匿名"或使用 i18n
 	amount?: string; // 赞助金额（可选）
 	date?: string; // 赞助日期（可选，ISO 格式）
-	message?: string; // 留言（可选）
 };
 
 // 赞助配置
@@ -728,4 +713,27 @@ export type SponsorConfig = {
 	sponsors?: SponsorItem[]; // 赞助者列表（可选）
 	showSponsorsList?: boolean; // 是否显示赞助者列表，默认 true
 	showButtonInPost?: boolean; // 是否在文章详情页底部显示赞助按钮，默认 true
+};
+
+// 响应式图像布局类型
+export type ResponsiveImageLayout = "constrained" | "full-width" | "none";
+
+// 图像格式类型
+export type ImageFormat = "avif" | "webp" | "png" | "jpg" | "jpeg" | "gif";
+
+// 相册元信息（用户在配置文件中填写）
+export type GalleryAlbum = {
+	id: string; // URL slug + 目录名，如 "japan-2025"
+	name: string; // 相册名称
+	description?: string; // 相册描述
+	date?: string; // 日期
+	location?: string; // 拍摄地点
+	tags?: string[]; // 标签（用于首页筛选）
+	cover?: string; // 手动指定封面（可选，省略则自动取 cover.* 或第一张）
+};
+
+// 相册配置
+export type GalleryConfig = {
+	albums: GalleryAlbum[];
+	columnWidth?: number; // 瀑布流最小列宽(px)，默认 240，浏览器根据容器宽度自动计算列数
 };

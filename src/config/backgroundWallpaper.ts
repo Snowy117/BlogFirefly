@@ -11,7 +11,7 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 		// 桌面背景图片
 		desktop: "/assets/images/d1.png",
 		// 移动背景图片
-		mobile: "/assets/images/m1.webp",
+		mobile: "assets/images/MobileWallpaper/m1.avif",
 	},
 
 	// Banner模式特有配置
@@ -24,6 +24,8 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 		homeText: {
 			// 主页显示自定义文本（全局开关）
 			enable: true,
+			// 是否允许用户通过控制面板切换横幅标题显示
+			switchable: true,
 			// 主页横幅主标题
 			title: "雪纷飞的博客",
 			// 主页横幅副标题
@@ -63,32 +65,31 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 			// 毛玻璃模糊度
 			blur: 3,
 		},
-		// 波浪动画效果配置，开启可能会影响页面性能，请根据自己的喜好开启
+		// 水波纹动画效果配置，开启会影响页面性能，请根据自己的喜好开启
 		waves: {
 			enable: {
 				desktop: true, // 桌面端启用波浪动画效果
 				mobile: true, // 移动端启用波浪动画效果
 			},
-			// performance: {
-			// 	quality: "high",
-			// 	hardwareAcceleration: true, // 是否启用硬件加速
-			// },
-			// 性能优化说明：
-			// quality: "high" - 最佳视觉效果，但GPU占用较高，适合高性能设备
-			// quality: "medium" - 平衡性能和质量，适合中等性能设备
-			// quality: "low" - 最低GPU占用，动画更简单，适合低性能设备
-			// hardwareAcceleration: true - 启用GPU加速，提升性能但增加GPU占用
-			// hardwareAcceleration: false - 禁用GPU加速，降低GPU占用但可能影响性能
+			switchable: true,
 		},
 	},
 
 	// 全屏透明覆盖模式特有配置
 	overlay: {
+		// 是否允许用户通过控制面板调整全屏透明模式参数
+		switchable: {
+			opacity: true,
+			blur: true,
+			cardOpacity: true,
+		},
 		// 层级，确保壁纸在背景层
 		zIndex: -1,
 		// 壁纸透明度
 		opacity: 0.8,
-		// 背景模糊程度
-		blur: 1,
+		// 背景模糊度
+		blur: 3,
+		// 卡片透明度，0-1之间，值越小越透明
+		cardOpacity: 0.6,
 	},
 }

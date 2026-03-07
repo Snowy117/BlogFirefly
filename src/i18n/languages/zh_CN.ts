@@ -20,6 +20,25 @@ export const zh_CN: Translation = {
 	[Key.recentPosts]: "最新文章",
 	[Key.postList]: "文章列表",
 	[Key.tableOfContents]: "目录",
+	[Key.music]: "音乐",
+	[Key.musicNoPlaying]: "暂未播放",
+	[Key.musicLyrics]: "歌词",
+	[Key.musicVolume]: "音量",
+	[Key.musicPlayMode]: "切换播放模式",
+	[Key.musicPrev]: "上一首",
+	[Key.musicNext]: "下一首",
+	[Key.musicPlaylist]: "列表",
+	[Key.musicNoLyrics]: "暂无歌词",
+	[Key.musicLoadingLyrics]: "正在加载歌词...",
+	[Key.musicFailedLyrics]: "歌词加载失败",
+	[Key.musicNoSongs]: "暂无歌曲",
+	[Key.musicError]: "播放器错误",
+	[Key.musicPlay]: "播放",
+	[Key.musicPause]: "暂停",
+	[Key.musicProgress]: "播放进度",
+	[Key.musicCover]: "封面",
+	[Key.musicNoCover]: "暂无封面",
+	[Key.musicAudioPlayer]: "音频播放器",
 
 	// 公告栏
 	[Key.announcement]: "公告",
@@ -58,6 +77,7 @@ export const zh_CN: Translation = {
 	[Key.author]: "作者",
 	[Key.publishedAt]: "发布于",
 	[Key.updatedAt]: "更新于",
+	[Key.readTime]: "阅读时长",
 	[Key.license]: "许可协议",
 	[Key.sourceCode]: "查看源码",
 	[Key.bangumi]: "番组计划",
@@ -174,11 +194,29 @@ export const zh_CN: Translation = {
 	// 置顶
 	[Key.pinned]: "置顶",
 
+	// 相关文章推荐
+	[Key.relatedPosts]: "相关文章",
+	[Key.randomPosts]: "随机文章",
+	[Key.smartRecommend]: "智能推荐",
+	[Key.randomRecommend]: "随机推荐",
+
+	// 加密
+	[Key.postEncrypted]: "本文已加密",
+
 	// 壁纸模式
 	[Key.wallpaperMode]: "壁纸模式",
 	[Key.wallpaperBannerMode]: "横幅壁纸",
 	[Key.wallpaperOverlayMode]: "全屏透明",
 	[Key.wallpaperNoneMode]: "纯色背景",
+
+	// 横幅设置
+	[Key.bannerSettings]: "横幅设置",
+	[Key.bannerTitle]: "首页横幅标题",
+	[Key.wavesAnimation]: "水波纹动画",
+	[Key.overlaySettings]: "透明设置",
+	[Key.overlayOpacity]: "壁纸透明度",
+	[Key.overlayBlur]: "背景模糊度",
+	[Key.overlayCardOpacity]: "卡片透明度",
 
 	// 文章布局
 	[Key.postListLayout]: "文章布局",
@@ -254,4 +292,21 @@ export const zh_CN: Translation = {
 	[Key.codeCollapsibleShowLess]: "显示更少",
 	[Key.codeCollapsibleExpanded]: "代码块已展开",
 	[Key.codeCollapsibleCollapsed]: "代码块已折叠",
+
+	// 相册页面
+	[Key.gallery]: "相册",
+	[Key.galleryDescription]: "记录生活中的美好瞬间",
+	[Key.galleryPhotos]: "张照片",
+	[Key.galleryAlbums]: "本相册",
+	[Key.galleryNoAlbums]: "暂无相册",
+	[Key.galleryBackToAlbums]: "返回相册列表",
+
+	// 密码保护
+	[Key.passwordProtected]: "密码保护",
+	[Key.passwordProtectedDesc]: "这篇文章已被密码保护，请输入密码查看内容。",
+	[Key.passwordHint]: "提示",
+	[Key.passwordPlaceholder]: "请输入密码",
+	[Key.passwordSubmit]: "解锁",
+	[Key.passwordError]: "密码错误，请重试。",
+	[Key.passwordProtectedRss]: "本文已加密保护，请访问网站查看。",
 };

@@ -31,16 +31,25 @@ import { remarkMermaid } from "./src/plugins/remark-mermaid.js";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
 import mdx from "@astrojs/mdx";
 import rehypeEmailProtection from "./src/plugins/rehype-email-protection.mjs";
+import rehypeExternalLinks from "./src/plugins/rehype-external-links.mjs";
 import rehypeFigure from "./src/plugins/rehype-figure.mjs";
+import { remarkImageGrid } from "./src/plugins/remark-image-grid.js";
 
 import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
-  site: siteConfig.site_url,
+	site: siteConfig.site_url,
 
 	base: "/",
 	trailingSlash: "always",
+
+	// 图像优化配置
+	image: {
+		// 全局响应式布局
+		experimentalLayout: "constrained",
+	},
+
 	integrations: [
 		swup({
 			theme: false,
@@ -48,7 +57,10 @@ export default defineConfig({
 			// the default value `transition-` cause transition delay
 			// when the Tailwind class `transition-all` is used
 			containers: [
+				"#banner-overlay-container",
+				"#banner-dim-container",
 				"#swup-container",
+				"#left-sidebar-dynamic",
 				"#right-sidebar-dynamic",
 				"#floating-toc-wrapper",
 			],
@@ -75,7 +87,7 @@ export default defineConfig({
 				"fa7-brands": ["*"],
 				"fa7-regular": ["*"],
 				"fa7-solid": ["*"],
-				"simple-icons": ["*"], 
+				"simple-icons": ["*"],
 				mdi: ["*"],
 			},
 		}),
@@ -84,16 +96,23 @@ export default defineConfig({
 			useDarkModeMediaQuery: false,
 			themeCssSelector: (theme) => `[data-theme='${theme.name}']`,
 			plugins: [
-				pluginLanguageBadge(),
+				// pluginLanguageBadge 配置 - 从expressiveCodeConfig读取设置
+				...(expressiveCodeConfig.pluginLanguageBadge?.enable === true
+					? [pluginLanguageBadge()]
+					: []),
 				pluginCollapsibleSections(),
 				pluginLineNumbers(),
 				// pluginCollapsible 配置 - 从expressiveCodeConfig读取设置，使用i18n文本
 				...(expressiveCodeConfig.pluginCollapsible?.enable === true
 					? [
 							pluginCollapsible({
-								lineThreshold: expressiveCodeConfig.pluginCollapsible.lineThreshold || 15,
-								previewLines: expressiveCodeConfig.pluginCollapsible.previewLines || 8,
-								defaultCollapsed: expressiveCodeConfig.pluginCollapsible.defaultCollapsed ?? true,
+								lineThreshold:
+									expressiveCodeConfig.pluginCollapsible.lineThreshold || 15,
+								previewLines:
+									expressiveCodeConfig.pluginCollapsible.previewLines || 8,
+								defaultCollapsed:
+									expressiveCodeConfig.pluginCollapsible.defaultCollapsed ??
+									true,
 								expandButtonText: i18n(I18nKey.codeCollapsibleShowMore),
 								collapseButtonText: i18n(I18nKey.codeCollapsibleShowLess),
 								expandedAnnouncement: i18n(I18nKey.codeCollapsibleExpanded),
@@ -142,95 +161,91 @@ export default defineConfig({
 				const url = new URL(page);
 				const pathname = url.pathname;
 
-              if (pathname === "/sponsor/" && !siteConfig.pages.sponsor) {
-                  return false;
-              }
-              if (pathname === "/guestbook/" && !siteConfig.pages.guestbook) {
-                  return false;
-              }
-              if (pathname === "/bangumi/" && !siteConfig.pages.bangumi) {
-                  return false;
-              }
+				if (pathname === "/sponsor/" && !siteConfig.pages.sponsor) {
+					return false;
+				}
+				if (pathname === "/guestbook/" && !siteConfig.pages.guestbook) {
+					return false;
+				}
+				if (pathname === "/bangumi/" && !siteConfig.pages.bangumi) {
+					return false;
+				}
+				if (pathname === "/gallery/" && !siteConfig.pages.gallery) {
+					return false;
+				}
 
-              return true;
-          },
-      }),
-      mdx(),
+				return true;
+			},
+		}),
+		mdx(),
 	],
-
-  markdown: {
-      remarkPlugins: [
-          remarkMath,
-          remarkReadingTime,
-          remarkExcerpt,
-          remarkDirective,
-          remarkSectionize,
-          parseDirectiveNode,
-          remarkMermaid,
-      ],
-      rehypePlugins: [
-          [rehypeKatex, { katex }],
-          [rehypeCallouts, { theme: siteConfig.rehypeCallouts.theme }],
-          rehypeSlug,
-          rehypeMermaid,
-          rehypeFigure,
-          [rehypeEmailProtection, { method: "base64" }],
-          [
-              rehypeComponents,
-              {
-                  components: {
-                      github: GithubCardComponent,
-					  file: FileComponent,
-                  },
-              },
-          ],
-          [
-              rehypeAutolinkHeadings,
-              {
-                  behavior: "append",
-                  properties: {
-                      className: ["anchor"],
-                  },
-                  content: {
-                      type: "element",
-                      tagName: "span",
-                      properties: {
-                          className: ["anchor-icon"],
-                          "data-pagefind-ignore": true,
-                      },
-                      children: [
-                          {
-                              type: "text",
-                              value: "#",
-                          },
-                      ],
-                  },
-              },
-          ],
-      ],
+	markdown: {
+		remarkPlugins: [
+			remarkMath,
+			remarkReadingTime,
+			remarkImageGrid,
+			remarkExcerpt,
+			remarkDirective,
+			remarkSectionize,
+			parseDirectiveNode,
+			remarkMermaid,
+		],
+		rehypePlugins: [
+			[rehypeKatex, { katex }],
+			[rehypeCallouts, { theme: siteConfig.rehypeCallouts.theme }],
+			rehypeSlug,
+			rehypeMermaid,
+			rehypeFigure,
+			[rehypeExternalLinks, { siteUrl: siteConfig.site_url }],
+			[rehypeEmailProtection, { method: "base64" }],
+			[
+				rehypeComponents,
+				{
+					components: {
+						github: GithubCardComponent,
+						file: FileComponent,
+					},
+				},
+			],
+			[
+				rehypeAutolinkHeadings,
+				{
+					behavior: "append",
+					properties: {
+						className: ["anchor"],
+					},
+					content: {
+						type: "element",
+						tagName: "span",
+						properties: {
+							className: ["anchor-icon"],
+							"data-pagefind-ignore": true,
+						},
+						children: [
+							{
+								type: "text",
+								value: "#",
+							},
+						],
+					},
+				},
+			],
+		],
 	},
 	vite: {
-      assetsInclude: ["**/*.zip"],
-		plugins: [
-			tailwindcss(),
-		],
+		assetsInclude: ["**/*.zip"],
+		plugins: [tailwindcss()],
 		resolve: {
 			alias: {
 				"@rehype-callouts-theme": `rehype-callouts/theme/${siteConfig.rehypeCallouts.theme}`,
 			},
 		},
 		build: {
-			// 启用资源压缩和优化
-			minify: "terser",
-			terserOptions: {
-				compress: {
-					drop_console: false, // 生产环境可改为true移除console
-					drop_debugger: true,
-				},
-				mangle: true,
-				format: {
-					comments: false,
-				},
+			minify: "esbuild",
+			esbuildOptions: {
+				minify: true,
+				// 移除 console.log 和 debugger
+				drop: ["console", "debugger"], 
 			},
 			rollupOptions: {
 				onwarn(warning, warn) {
@@ -246,15 +261,9 @@ export default defineConfig({
 			},
 			// CSS 优化
 			cssCodeSplit: true,
-			cssMinify: true,
-			// 资源大小限制 - 减少内联资源
-			assetsInlineLimit: 4096,
-			// 减少源映射大小（可选，生产环境改为false）
-			sourcemap: false,
-			// 并行处理构建
-			workers: 4,
+			cssMinify: "esbuild",
 		},
 	},
 
-  adapter: cloudflare(),
+	adapter: cloudflare(),
 });

@@ -38,13 +38,21 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 	// 		},
 	// 	],
 	// });
-
 	// 友链
 	links.push(LinkPreset.Friends);
 
 	// 根据配置决定是否添加留言板，在siteConfig关闭pages.guestbook时导航栏不显示留言板
 	if (siteConfig.pages.guestbook) {
 		links.push(LinkPreset.Guestbook);
+	}
+
+	if (siteConfig.pages.gallery) {
+		links.push({
+			name: "我的",
+			url: "/my/",
+			icon: "material-symbols:person",
+			children: [LinkPreset.Gallery],
+		});
 	}
 
 	// 关于及其子菜单

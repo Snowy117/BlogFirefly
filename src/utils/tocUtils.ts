@@ -95,6 +95,17 @@ export class TOCManager {
 	}
 
 	/**
+	 * 获取标题的纯文本内容（排除 script/style 标签的文本）
+	 */
+	private getCleanTextContent(element: HTMLElement): string {
+		const clone = element.cloneNode(true) as HTMLElement;
+		for (const el of clone.querySelectorAll("script, style")) {
+			el.remove();
+		}
+		return clone.textContent || "";
+	}
+
+	/**
 	 * 生成徽章内容
 	 */
 	private generateBadgeContent(depth: number, heading1Count: number): string {
@@ -145,13 +156,36 @@ export class TOCManager {
 				heading1Count++;
 			}
 
-			const headingText = (heading.textContent || "").replace(/#+\s*$/, "");
+			let headingText = this.getCleanTextContent(heading)
+				.replace(/#+\s*$/, "")
+				.trim();
+
+			// Fallback for empty text (e.g. dynamic subtitle)
+			if (!headingText) {
+				const dataSubtitles = heading.getAttribute("data-subtitles");
+				if (dataSubtitles) {
+					try {
+						const subtitles = JSON.parse(dataSubtitles);
+						headingText = Array.isArray(subtitles) ? subtitles[0] : subtitles;
+					} catch {
+						// ignore
+					}
+				}
+			}
+
+			if (!headingText) {
+				headingText =
+					heading.id === "banner-subtitle"
+						? "Banner Subtitle"
+						: heading.id || "Heading";
+			}
 
 			tocHTML += `
         <a 
           href="#${heading.id}" 
           class="px-2 flex gap-2 relative transition w-full min-h-9 rounded-xl hover:bg-(--toc-btn-hover) active:bg-(--toc-btn-active) py-2 ${depthClass}"
           data-heading-id="${heading.id}"
+          aria-label="${headingText}"
         >
           <div class="transition w-5 h-5 shrink-0 rounded-lg text-xs flex items-center justify-center font-bold ${depth === this.minDepth ? "bg-(--toc-badge-bg) text-(--btn-content)" : ""}">
             ${badgeContent}
