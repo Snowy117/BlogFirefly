@@ -87,6 +87,7 @@ export default defineConfig({
 				"fa7-brands": ["*"],
 				"fa7-regular": ["*"],
 				"fa7-solid": ["*"],
+				mingcute: ["*"],
 				"simple-icons": ["*"],
 				mdi: ["*"],
 			},
