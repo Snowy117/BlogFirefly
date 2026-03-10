@@ -1,6 +1,5 @@
 ---
 title: Jar反混淆：AliCTF Thief Writeup
-pinned: true
 description: java class反混淆
 tags: [网络安全]
 category: 技术

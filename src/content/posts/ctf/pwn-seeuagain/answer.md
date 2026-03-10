@@ -1,6 +1,5 @@
 ---
 title: PWN：Seeuagain题目解答
-pinned: true
 description: 让我牵起你的手看，天地阔，岁月长。
 tags: [网络安全]
 category: 技术
