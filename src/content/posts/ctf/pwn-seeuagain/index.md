@@ -362,7 +362,7 @@ payload = fmtstr_payload(
 
 建议您先尝试完成题目后再阅读此节的内容。
 
-```text ins="Full RELRO" ins="Canary found" ins="NX enabled" ins="PIE enabled" ins="Enabled" del="No"
+```text ins="Full RELRO" ins="Canary found" ins="NX enabled" ins="PIE enabled" del=/(?<=(?:SHSTK|IBT):\s{1,10})Enabled/ del="No"
 $ checksec
 RELRO:      Full RELRO
 Stack:      Canary found
@@ -371,6 +371,8 @@ PIE:        PIE enabled
 SHSTK:      Enabled
 IBT:        Enabled
 Stripped:   No
+$ # 由于ld.so的原因，SHSTK和IBT实际上并没有开启
+$ # 另外，Linux不支持用户态程序的IBT保护
 ```
 ```c
 void init()

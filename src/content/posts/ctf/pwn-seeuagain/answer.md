@@ -16,7 +16,7 @@ image: "api"
 
 # 题目回顾
 
-```text ins="Full RELRO" ins="Canary found" ins="NX enabled" ins="PIE enabled" ins="Enabled" del="No"
+```text ins="Full RELRO" ins="Canary found" ins="NX enabled" ins="PIE enabled" del=/(?<=(?:SHSTK|IBT):\s{1,10})Enabled/ del="No"
 $ checksec
 RELRO:      Full RELRO
 Stack:      Canary found
@@ -25,6 +25,8 @@ PIE:        PIE enabled
 SHSTK:      Enabled
 IBT:        Enabled
 Stripped:   No
+$ # 由于ld.so的原因，SHSTK和IBT实际上并没有开启
+$ # 另外，Linux不支持用户态程序的IBT保护
 ```
 
 核心逻辑：
@@ -341,6 +343,13 @@ p.interactive()
 ```
 
 拿到 shell！
+
+# Bonus：思考题
+
+> [!QUESTION]
+> **如果本题真的开启了Shadow Stack保护，又应该怎么完成呢？**
+> 
+> ~~文章的篇幅已经够长了，思考题的分析和解答就等有空了再水一篇博客吧！~~
 
 <!-- 引用 -->
 
