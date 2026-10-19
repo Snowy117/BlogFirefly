@@ -2,6 +2,9 @@
 dist/
 public/typst/
 
+# generated vndb covers
+public/vndb-covers/
+
 # generated types
 .astro/
 
@@ -30,10 +33,12 @@ yarn.lock
 # ide
 .idea
 *.iml
-.claude
 
 # docs
 Firefly-docs/
+
+# lite 版本
+Firefly-Lite/
 
 cache/
 package/
@@ -43,3 +48,8 @@ package/
 
 # nix / direnv
 .direnv/
+
+# vibe coding
+.codex*
+.claude
+.mimocode

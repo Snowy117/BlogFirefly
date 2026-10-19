@@ -1,4 +1,4 @@
-import type { SponsorConfig } from "../types/config";
+import type { SponsorConfig } from "../types/sponsorConfig";
 
 export const sponsorConfig: SponsorConfig = {
 	// 页面标题，如果留空则使用 i18n 中的翻译
@@ -7,17 +7,20 @@ export const sponsorConfig: SponsorConfig = {
 	// 页面描述文本，如果留空则使用 i18n 中的翻译
 	description: "",
 
-	// 赞助用途说明
+	// 打赏用途说明
 	usage:
-		"您的赞助将用于服务器维护、内容创作和功能开发，帮助我持续提供优质内容。",
+		"您的打赏将用于服务器维护、内容创作和功能开发，帮助我持续提供优质内容。",
 
-	// 是否显示赞助者列表
+	// 是否显示打赏者列表
 	showSponsorsList: true,
 
-	// 是否在文章详情页底部显示赞助按钮
+	// 是否显示评论区，需要先在commentConfig.ts启用评论系统
+	showComment: true,
+
+	// 是否在文章详情页底部显示打赏按钮
 	showButtonInPost: true,
 
-	// 赞助方式列表
+	// 打赏方式列表
 	methods: [
 		// {
 		// 	name: "支付宝",
@@ -45,7 +48,7 @@ export const sponsorConfig: SponsorConfig = {
 		// },
 		{
 			name: "Github",
-			icon: "fa6-brands:github",
+			icon: "fa7-brands:github",
 			qrCode: "",
 			link: "https://github.com/Snowy117",
 			description: "点个Star就是最大的支持",
@@ -53,20 +56,7 @@ export const sponsorConfig: SponsorConfig = {
 		},
 	],
 
-	// 赞助者列表（可选）
+	// 打赏者列表（可选）
 	sponsors: [
-		// 	// 示例：已实名赞助者
-		// 	// {
-		// 	// 	name: "夏叶",
-		// 	// 	amount: "¥50",
-		// 	// 	date: "2025-10-01",
-		// 	// 	message: "感谢分享！",
-		// 	// },
-		// 	// 示例：匿名赞助者
-		// 	// {
-		// 	// 	name: "匿名用户",
-		// 	// 	amount: "¥20",
-		// 	// 	date: "2025-10-01",
-		// 	// },am-sync
 	],
 };

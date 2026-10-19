@@ -21,6 +21,7 @@
             nodejs_24
             corepack
             patchelf
+            typst
           ];
 
           shellHook = ''

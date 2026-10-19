@@ -1,4 +1,4 @@
-import type { ProfileConfig } from "../types/config";
+import type { ProfileConfig } from "../types/profileConfig";
 
 export const profileConfig: ProfileConfig = {
 	// 头像
@@ -16,20 +16,20 @@ export const profileConfig: ProfileConfig = {
 	// showName: true 时显示图标和名称，false 时只显示图标
 	links: [
 		// {
-		// 	name: "Bilibli",
-		// 	icon: "fa6-brands:bilibili",
+		// 	name: "Bilibili",
+		// 	icon: "fa7-brands:bilibili",
 		// 	url: "https://space.bilibili.com/38932988",
 		// 	showName: false,
 		// },
 		{
 			name: "GitHub",
-			icon: "fa6-brands:github",
+			icon: "fa7-brands:github",
 			url: "https://github.com/Snowy117",
 			showName: false,
 		},
 		{
 			name: "Email",
-			icon: "fa6-solid:envelope",
+			icon: "fa7-solid:envelope",
 			url: "mailto:snowflies@outlook.com",
 			showName: false,
 		},
@@ -37,6 +37,12 @@ export const profileConfig: ProfileConfig = {
 			name: "RSS",
 			icon: "fa7-solid:rss",
 			url: "/rss/",
+			showName: false,
+		},
+		{
+			name: "Atom",
+			icon: "fa7-solid:atom",
+			url: "/atom/",
 			showName: false,
 		},
 	],
