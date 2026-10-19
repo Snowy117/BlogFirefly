@@ -1,8 +1,5 @@
 {
   "src:assets/images/avatar.avif": "dcd8d5d1cecabea9a9",
-  "public:gallery/firefly-2026/cover.avif": "7588a28a8f989e8d88",
-  "public:gallery/firefly-2026/1.avif": "c8bca9dde6d2babfb5",
-  "src:content/posts/guide/cover.avif": "c8bca9dde6d2babfb5",
   "src:content/posts/images/vitepress.avif": "3d3d43e1e1e7ebe0da",
   "src:content/posts/images/right-grid2.avif": "cbcdcddddcd9d8d7db",
   "src:content/posts/images/obsidian.avif": "3a4145dce3e6e8ded8",
@@ -31,8 +28,20 @@
   "src:assets/images/DesktopWallpaper/d3.avif": "4268936f829e99adc7",
   "src:assets/images/DesktopWallpaper/d2.avif": "e8f3e6b0bdb4f5e6de",
   "src:assets/images/DesktopWallpaper/d1.avif": "8b9bb59ba6bae7d7dd",
-  "public:assets/images/sponsor/wechat.png": "d5d5d5dad9d7dbd8cf",
-  "public:assets/images/sponsor/alipay.png": "8ebbde91bedf93c0e0",
   "public:assets/images/ad/ad1.webp": "a1b8b68a8e918c8f93",
-  "src:content/projects/images/firefly.avif": "b5b0b3bcb6bbe0e0df"
+  "src:content/projects/images/firefly.avif": "b5b0b3bcb6bbe0e0df",
+  "public:assets/images/d1.png": "bc8e97edc1b17d5a5d",
+  "public:assets/images/avatar.jpg": "d0c9c8d0c6c397908e",
+  "src:content/posts/what-a-beautiful-pwsh/效果.png": "2d3344292d3e2e3040",
+  "src:content/posts/what-a-beautiful-pwsh/pwsh-logo.png": "11284b21204b152146",
+  "src:content/posts/remove-amd-context-menu/geek-uninstall.png": "dbd7daf1eff1e8ebef",
+  "src:content/posts/remove-amd-context-menu/amd-logo.avif": "1d1d1c2a1e1d712f1d",
+  "src:content/posts/remove-amd-context-menu/amd-context-menu.png": "8f8e8e8f8f8f909090",
+  "src:content/posts/pdo-is-not-that-safe/sql.png": "113a5c263a4f274067",
+  "src:content/posts/harmony-hyperv-mihomo/set-adapter.png": "7272726e6e6f6e6e6f",
+  "src:content/posts/harmony-hyperv-mihomo/new-adapter.png": "7473756f6f706e6e6e",
+  "src:content/posts/harmony-hyperv-mihomo/configure-ics.png": "f3f3f4eeeeeff2f2f2",
+  "src:content/posts/ctf/rev-thief/no-goto.png": "2b2b2b1f1f1f222221",
+  "src:content/posts/ctf/rev-thief/jeb-ugly.png": "4e4f4f5151524b4c4c",
+  "src:content/posts/ctf/rev-thief/flag.png": "35353335353236352e"
 }
