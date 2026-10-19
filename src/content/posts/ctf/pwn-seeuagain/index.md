@@ -106,10 +106,10 @@ rcx = 1998
 ```c
 void function()
 {
-    printf("%d %d %d %d %d %p", 0, 1, 2, 3, 4, 5);
+    printf("%d %d %d %d %d %d %p", 0, 1, 2, 3, 4, 5);
 }
 ```
-前面五个`%d`会分别输出保存在寄存器内的数字0到5。而额外的`%p`将会输出栈上的首个数字，输出方式是作为地址输出。运行这个函数，在`printf`被调用之前`main`的上下文如下：
+前面五个`%d`会分别输出保存在寄存器内的数字0到4。最后一个`%d`输出栈上的`5`，额外的`%p`将会输出栈上的下一个数字，输出方式是作为地址输出。运行这个函数，在`printf`被调用之前`main`的上下文如下：
 ```text
 <Reg>
     [rdi] = "%d %d %d %d %d %p"
@@ -121,9 +121,8 @@ void function()
 
 <Stack>
     Low  Addr +----------------------------------------+
-    rsp -0x10 |  QWORD 0x5;                            |
-        -0x08 |  QWORD __canary = 0xDEADBEEFCOFFEE00;  |
-    rbp  0x00 |  QWORD __saved_regiters;               |
+    rsp -0x08 |  QWORD 0x5;                            |
+    rbp  0x00 |  QWORD __canary = 0xDEADBEEFCOFFEE00;  |
         +0x08 |  QWORD *__return_address;              |
     High Addr +----------------------------------------+
 ```
