@@ -44,6 +44,11 @@ export default defineConfig({
 	base: "/",
 	trailingSlash: "always",
 
+	// 开发服务器监听局域网地址（供内网其他设备访问）
+	server: {
+		host: "192.168.100.4",
+	},
+
 	// 图像优化配置
 	image: {
 		// 全局响应式布局

@@ -40,3 +40,6 @@ package/
 .obsidian/
 # Local Netlify folder
 .netlify
+
+# nix / direnv
+.direnv/
