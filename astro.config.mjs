@@ -361,7 +361,8 @@ export default defineConfig({
 		plugins: [tailwindcss()],
 		server: {
 			watch: {
-				ignored: ["**/package/**", "**/Firefly-docs/**"],
+				// .direnv 内有指向 nix store 的符号链接，不排除的话 Vite 会遍历整个 nixpkgs，启动会慢几十秒
+				ignored: ["**/package/**", "**/Firefly-docs/**", "**/.direnv/**"],
 			},
 		},
 		resolve: {
